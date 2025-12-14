@@ -4,11 +4,19 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ProjectModal from "@/components/ui/ProjectModal";
+import ImageModal from "@/components/ui/ImageModal";
+import JournalModal from "@/components/ui/JournalModal";
 import { projects, certificates, gallery, journal } from "@/constants/constants";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<typeof projects[0] | null>(null);
+
+  const [imageOpen, setImageOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
+
+  const [journalOpen, setJournalOpen] = useState(false);
+  const [selectedJournal, setSelectedJournal] = useState<typeof journal[0] | null>(null);
 
   return (
     <main className="max-w-6xl mx-auto px-4 pt-16 scroll-smooth">
@@ -92,9 +100,7 @@ export default function Home() {
       </section>
 
       {/* PROJECT MODAL */}
-      {selected && (
-        <ProjectModal open={open} setOpen={setOpen} project={selected} />
-      )}
+      {selected && <ProjectModal open={open} setOpen={setOpen} project={selected} />}
 
       {/* ================= ABOUT SECTION ================= */}
       <section id="about" className="min-h-screen py-20">
@@ -104,6 +110,7 @@ export default function Home() {
           with clean design, smooth animations, and real-world functionality.
         </p>
       </section>
+
       {/* ================= CERTIFICATES SECTION ================= */}
       <section id="certificates" className="min-h-screen py-20">
         <h2 className="text-3xl font-semibold mb-8">Certificates</h2>
@@ -111,6 +118,7 @@ export default function Home() {
           {certificates.map((cert, index) => (
             <div
               key={index}
+              onClick={() => { setSelectedImage(cert); setImageOpen(true); }}
               className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur p-2 cursor-pointer hover:scale-105 transition"
             >
               <Image
@@ -132,6 +140,7 @@ export default function Home() {
           {gallery.map((img, index) => (
             <div
               key={index}
+              onClick={() => { setSelectedImage(img); setImageOpen(true); }}
               className="rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition"
             >
               <Image
@@ -146,6 +155,16 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ================= IMAGE MODAL ================= */}
+      {selectedImage && (
+        <ImageModal
+          open={imageOpen}
+          setOpen={setImageOpen}
+          src={selectedImage.src}
+          alt={selectedImage.alt}
+        />
+      )}
+
       {/* ================= JOURNAL SECTION ================= */}
       <section id="journal" className="min-h-screen py-20">
         <h2 className="text-3xl font-semibold mb-8">Journal</h2>
@@ -153,15 +172,42 @@ export default function Home() {
           {journal.map((entry, index) => (
             <div
               key={index}
-              className="border border-white/10 rounded-xl p-4 bg-white/5 backdrop-blur"
+              onClick={() => { setSelectedJournal(entry); setJournalOpen(true); }}
+              className="border border-white/10 rounded-xl p-4 bg-white/5 backdrop-blur flex flex-col md:flex-row gap-4 cursor-pointer hover:scale-105 transition"
             >
-              <h3 className="text-xl font-semibold mb-2">{entry.day}</h3>
-              <p className="text-muted-foreground">{entry.text}</p>
+              {/* Image */}
+              <div className="flex-shrink-0 w-full md:w-48 h-32 relative rounded-md overflow-hidden">
+                <Image
+                  src={`/${entry.img}`}
+                  alt={entry.company}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              {/* Text */}
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold">{entry.day}</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  <span className="font-medium">{entry.company}</span> — {entry.date}
+                </p>
+                <p className="text-muted-foreground">{entry.text}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
-            {/* ================= CONTACT SECTION ================= */}
+
+      {/* ================= JOURNAL MODAL ================= */}
+      {selectedJournal && (
+        <JournalModal
+          open={journalOpen}
+          setOpen={setJournalOpen}
+          entry={selectedJournal}
+        />
+      )}
+
+      {/* ================= CONTACT SECTION ================= */}
       <section id="contact" className="min-h-screen py-20">
         <h2 className="text-3xl font-semibold mb-8">Contact</h2>
         <form className="max-w-md space-y-4">
@@ -185,7 +231,6 @@ export default function Home() {
           </button>
         </form>
       </section>
-
     </main>
   );
 }
