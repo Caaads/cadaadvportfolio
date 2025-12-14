@@ -2,19 +2,45 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageModal from "./ImageModal";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+interface JournalEntry {
+  images: string[];
+  company: string;
+  date: string;
+  day: string;
+  text: string;
+}
 
 interface JournalModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  entry: { img: string; company: string; date: string; day: string; text: string } | null;
+  entry: JournalEntry | null;
 }
 
 export default function JournalModal({ open, setOpen, entry }: JournalModalProps) {
+  const [imageIndex, setImageIndex] = useState(0);
   const [fullImageOpen, setFullImageOpen] = useState(false);
 
   if (!entry) return null;
+
+  // Auto-next logic
+  useEffect(() => {
+    if (!open) return;
+    const interval = setInterval(() => {
+      setImageIndex((prev) => (prev + 1) % entry.images.length);
+    }, 3000); // change image every 3 seconds
+    return () => clearInterval(interval);
+  }, [open, entry.images.length]);
+
+  const nextImage = () =>
+    setImageIndex((prev) => (prev + 1) % entry.images.length);
+  const prevImage = () =>
+    setImageIndex((prev) =>
+      prev === 0 ? entry.images.length - 1 : prev - 1
+    );
 
   return (
     <>
@@ -24,33 +50,53 @@ export default function JournalModal({ open, setOpen, entry }: JournalModalProps
             <DialogTitle className="text-2xl">{entry.day}</DialogTitle>
           </DialogHeader>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}>
-            {/* Journal Image */}
-            <div
-              className="cursor-pointer mb-4 w-full h-64 relative rounded-md overflow-hidden"
-              onClick={() => setFullImageOpen(true)}
-            >
-              <img src={`/${entry.img}`} alt={entry.company} className="object-cover w-full h-full rounded-md" />
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            {/* IMAGE CAROUSEL */}
+            <div className="relative mb-4 w-full h-64 rounded-md overflow-hidden">
+              <img
+                src={`/${entry.images[imageIndex]}`}
+                alt={entry.company}
+                onClick={() => setFullImageOpen(true)}
+                className="w-full h-full object-cover cursor-pointer rounded-md"
+              />
+
+              {/* LEFT ARROW */}
+              <button
+                onClick={prevImage}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
+              >
+                <ChevronLeft />
+              </button>
+
+              {/* RIGHT ARROW */}
+              <button
+                onClick={nextImage}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
+              >
+                <ChevronRight />
+              </button>
             </div>
 
-            {/* Company & Date */}
+            {/* COMPANY & DATE */}
             <p className="text-muted-foreground mb-2">
               <span className="font-medium">{entry.company}</span> — {entry.date}
             </p>
 
-            {/* Text */}
+            {/* TEXT */}
             <p className="text-muted-foreground">{entry.text}</p>
           </motion.div>
         </DialogContent>
       </Dialog>
 
-      {/* Fullscreen Journal Image */}
-      <ImageModal
-        open={fullImageOpen}
-        setOpen={setFullImageOpen}
-        src={entry.img}
-        alt={entry.company}
-      />
+      {/* FULL IMAGE VIEW */}
+      {fullImageOpen && (
+        <ImageModal
+          open={fullImageOpen}
+          setOpen={setFullImageOpen}
+          src={entry.images[imageIndex]}
+          alt={entry.company}
+        />
+      )}
     </>
   );
 }

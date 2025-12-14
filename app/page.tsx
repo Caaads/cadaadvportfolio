@@ -7,6 +7,8 @@ import ProjectModal from "@/components/ui/ProjectModal";
 import ImageModal from "@/components/ui/ImageModal";
 import JournalModal from "@/components/ui/JournalModal";
 import { projects, certificates, gallery, journal } from "@/constants/constants";
+import TechStackSlider from "@/components/ui/TechStackSlider";
+
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -34,7 +36,7 @@ export default function Home() {
           transition={{ duration: 0.7 }}
         >
           <h1 className="text-5xl md:text-6xl font-bold mb-4">
-            Hi, I’m Alfred Mari Infiesto Cada
+            Alfred Mari Infiesto Cada
           </h1>
           <p className="text-lg text-muted-foreground mb-8 max-w-md">
             IT student focused on modern web development, clean UI,
@@ -77,6 +79,8 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
+      
+      <TechStackSlider />
 
       {/* ================= PROJECTS SECTION ================= */}
       <section id="projects" className="min-h-screen py-20">
@@ -167,18 +171,23 @@ export default function Home() {
 
       {/* ================= JOURNAL SECTION ================= */}
       <section id="journal" className="min-h-screen py-20">
-        <h2 className="text-3xl font-semibold mb-8">Journal</h2>
+        <h2 className="text-3xl font-semibold mb-8">
+          <span className="italic">Journal (Click inside the popup for full view and auto next images)</span>
+        </h2>
         <div className="space-y-6 max-w-3xl">
           {journal.map((entry, index) => (
             <div
               key={index}
-              onClick={() => { setSelectedJournal(entry); setJournalOpen(true); }}
+              onClick={() => {
+                setSelectedJournal(entry);
+                setJournalOpen(true);
+              }}
               className="border border-white/10 rounded-xl p-4 bg-white/5 backdrop-blur flex flex-col md:flex-row gap-4 cursor-pointer hover:scale-105 transition"
             >
-              {/* Image */}
+              {/* Thumbnail (first image) */}
               <div className="flex-shrink-0 w-full md:w-48 h-32 relative rounded-md overflow-hidden">
                 <Image
-                  src={`/${entry.img}`}
+                  src={`/${entry.images[0]}`}
                   alt={entry.company}
                   fill
                   className="object-cover"
