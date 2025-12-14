@@ -3,13 +3,13 @@
 import { techStack } from "@/constants/techStack";
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
-export default function TechStackSlider() {  // <-- renamed
+export default function TechStackSlider() {
   return (
     <section id="techstack" className="py-20 bg-background/5">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-semibold mb-10 text-center">Tech Stack</h2>
 
-        <InfiniteSlider speed={50} gap={40} pauseOnHover={true}>
+        <InfiniteSlider speed={50} gap={40}>
           {techStack.map((tech, index) => (
             <div
               key={index}

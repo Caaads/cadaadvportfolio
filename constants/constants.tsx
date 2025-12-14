@@ -13,7 +13,7 @@ export const projects = [
     title: "HCDC OSA PARTNERSHIP PORTAL (UNFINISHED)",
     description:
       "Monitoring system for student partnerships and internships with role-based access. (UNFINISHED)",
-    live: "#",
+    live: "",
     github: "https://github.com/Caaads/WSFINAL.git",
     tech: ["React","Django", "Python", "HTML", "CSS", "Javascript"],
   },
@@ -29,7 +29,7 @@ export const projects = [
     title: "ShapeLift Mobile with Cloud Firestore Database",
     description:
       "A react native app that allows users to buy gym related products. Our ADV102 project.",
-    live: "#",
+    live: "",
     github: "https://github.com/Caaads/ADV-SHAPELIFT.git",
     tech: ["ReactNative", "Firebase", "Typescript", "Javascript"],
   },
