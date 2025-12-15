@@ -12,7 +12,7 @@ export const projects = [
   {
     title: "HCDC OSA PARTNERSHIP PORTAL (UNFINISHED)",
     description:
-      "Monitoring system for student partnerships and internships with role-based access. (UNFINISHED)",
+      "Our WS101 project. A web-based Monitoring system for student partnerships and internships with role-based access.",
     live: "",
     github: "https://github.com/Caaads/WSFINAL.git",
     tech: ["React","Django", "Python", "HTML", "CSS", "Javascript"],
@@ -20,7 +20,7 @@ export const projects = [
   {
     title: "ShapeLift",
     description:
-      "A shopee inspired e-commerce platform that allows users to buy gym related products. (Current source code not found)",
+      "Our ADV101 project. A shopee inspired e-commerce platform that allows users to buy gym related products. (Current source code not found)",
     live: "https://shapelift.vercel.app",
     github: "https://github.com/Caaads",
     tech: ["HTML", "CSS", "Javascript"],
@@ -43,10 +43,29 @@ export const certificates = [
 ];
 
 export const gallery = [
-  { src: "cebu1.jpg", alt: "Cebu 1" },
-  { src: "cebu2.jpg", alt: "Cebu 2" },
-  { src: "bohol1.jpg", alt: "Bohol 1" },
-  { src: "bohol2.jpg", alt: "Bohol 2" },
+  { src: "gallery1.jpg", alt: "Airport before flight to Cebu" },
+  { src: "gallery2.jpg", alt: "Arrival at SM city Cebu" },
+  { src: "gallery3.jpg", alt: "Floating Restaurant" },
+  { src: "gallery4.jpg", alt: "Panglao Vista Suites" },
+  { src: "gallery5.jpg", alt: "SOMAC Korean Restaurant" },
+  { src: "gallery6.jpg", alt: "SOMAC Korean Restaurant" },
+  { src: "gallery7.jpg", alt: "HAHAHAHAHAHA" },
+  { src: "gallery8.jpg", alt: "Mata Technologies" },
+  { src: "gallery9.jpg", alt: "Airport before flight to Cebu 2" },
+  { src: "gallery10.jpg", alt: "Airport before flight to Cebu 3" },
+  { src: "gallery11.jpg", alt: "BAI hotel Celebration of Subrio's Birthday" },
+  { src: "gallery12.jpg", alt: "Lapulapu Statue Mactan Island" },
+  { src: "gallery13.jpg", alt: "Sto. Nino, Cebu" },
+  { src: "gallery14.jpg", alt: "On our way to TOPS for Dinner" },
+  { src: "gallery15.jpg", alt: "HAHAHAHAHAHAHA sleepwell" },
+  { src: "gallery16.jpg", alt: "Dinner at TOPS with these fine gents" },
+  { src: "gallery17.jpg", alt: "TOPS" },
+  { src: "gallery18.jpg", alt: "Sto. Nino, Cebu" },
+  { src: "gallery19.jpg", alt: "Office of the vice mayor" },
+  { src: "gallery20.jpg", alt: "Art Museum in BAI Hotel" },
+  { src: "gallery21.jpg", alt: "Art Museum in BAI Hotel" },
+  { src: "gallery22.jpg", alt: "Art Museum in BAI Hotel" },
+  { src: "gallery23.jpg", alt: "Cafe BAI Hotel, with these fine gents" },
 ];
 
 export const journal = [
@@ -103,5 +122,33 @@ export const journal = [
       "TARSIER DAY 5.jpg",
       "tarsiergrouppic.jpg",
     ],
+  },
+];
+export const education = [
+  {
+    level: "Elementary",
+    school: "Our Lady of Fatima Academy of Davao Inc.",
+    year: "2013 – 2017",
+    logo: "/OLFA.png",
+  },
+  {
+    level: "High School",
+    school: "Our Lady of Fatima Academy of Davao Inc.",
+    year: "2017 – 2021",
+    logo: "/OLFA.png",
+  },
+  {
+    level: "Senior High School",
+    school: "Our Lady of Fatima Academy of Davao Inc.",
+    year: "2021 – 2023",
+    strand: "STEM",
+    logo: "/OLFA.png",
+  },
+  {
+    level: "College",
+    school: "Holy Cross of Davao College",
+    year: "2023 – Present",
+    logo: "/hcdc_logo.png",
+    current: true,
   },
 ];

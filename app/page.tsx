@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, AnimatePresence  } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import ProjectModal from "@/components/ui/ProjectModal";
 import ImageModal from "@/components/ui/ImageModal";
 import JournalModal from "@/components/ui/JournalModal";
-import { projects, certificates, gallery, journal } from "@/constants/constants";
+import { projects, certificates, gallery, journal, education} from "@/constants/constants";
 import TechStackSlider from "@/components/ui/TechStackSlider";
+import PortfolioLoader from "@/components/ui/PortfolioLoader";
+import EducationTimeline from "@/components/ui/EducationalTimeline";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -19,7 +21,80 @@ export default function Home() {
   const [journalOpen, setJournalOpen] = useState(false);
   const [selectedJournal, setSelectedJournal] = useState<typeof journal[0] | null>(null);
 
+  const [loading, setLoading] = useState(true);
+  const [showSkip, setShowSkip] = useState(false);
+const aboutImages = [
+  { src: "/profile.jpg", caption: "Focused on clean UI and real-world systems" },
+  { src: "/profile2.jpg", caption: "Achieving excellence in every project" },
+  { src: "/profile3.jpg", caption: "Exploring tech with creativity" },
+  { src: "/profile4.jpg", caption: "Fitness, discipline, and consistency" },
+];
+
+const [aboutIndex, setAboutIndex] = useState(0);
+const [aboutInView, setAboutInView] = useState(false);
+
+const nextAbout = () =>
+  setAboutIndex((prev) => (prev + 1) % aboutImages.length);
+
+const prevAbout = () =>
+  setAboutIndex((prev) =>
+    prev === 0 ? aboutImages.length - 1 : prev - 1
+  );
+
+useEffect(() => {
+  // Minimum delay before content loads (like your 1.5s or until image loads)
+  const minTimer = setTimeout(() => setLoading(false), 1500);
+
+  // Show skip button after 5s if still loading
+  const skipTimer = setTimeout(() => {
+    if (loading) setShowSkip(true);
+  }, 5000);
+
+  // Force hide preloader after 10s
+  const maxTimer = setTimeout(() => setLoading(false), 10000);
+
+  return () => {
+    clearTimeout(minTimer);
+    clearTimeout(skipTimer);
+    clearTimeout(maxTimer);
+  };
+}, [loading]);
+
+const galleryRef = useRef<HTMLDivElement>(null);
+const [galleryWidth, setGalleryWidth] = useState(0);
+
+useEffect(() => {
+  if (galleryRef.current) {
+    setGalleryWidth(galleryRef.current.scrollWidth - galleryRef.current.offsetWidth);
+  }
+}, [galleryRef.current, gallery.length]);
+
+const scrollGallery = (direction: number) => {
+  if (!galleryRef.current) return;
+  const scrollAmount = 400; // adjust for card width
+  galleryRef.current.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+};
+
+
   return (
+        <>
+      {/* ================= PRELOADER ================= */}
+<AnimatePresence>
+  {loading && (
+    <div className="relative">
+      <PortfolioLoader />
+      <button
+        onClick={() => setLoading(false)}
+        className="absolute top-4 right-4 px-4 py-2 bg-white text-black rounded-md"
+      >
+        Skip
+      </button>
+    </div>
+  )}
+</AnimatePresence>
+
+      {/* ================= MAIN SITE ================= */}
+      {!loading && (
     <main className="max-w-6xl mx-auto px-4 pt-16 scroll-smooth">
 
       {/* ================= HERO SECTION ================= */}
@@ -61,13 +136,15 @@ export default function Home() {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border border-white/20 shadow-[0_0_60px_rgba(56,189,248,0.15)]">
-            <Image
-              src="/profile1.jpg"
-              alt="Profile picture"
-              fill
-              className="object-cover"
-              priority
-            />
+<Image
+  src="/profile1.jpg"
+  alt="Profile picture"
+  fill
+  className="object-cover"
+  onLoad={() => setLoading(false)} // only hides loader after image loads
+  priority
+/>
+
           </div>
         </motion.div>
       </motion.section>
@@ -112,20 +189,72 @@ export default function Home() {
         viewport={{ once: false }}
       >
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
-          <motion.div
-            className="flex-1 relative w-full h-80 md:h-[400px] rounded-xl overflow-hidden border border-white/10 shadow-lg"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            viewport={{ once: false }}
-          >
-            <img
-              src="/profile.jpg"
-              alt="Alfred Mari Infiesto Cada"
-              className="object-cover w-full h-full"
-            />
-          </motion.div>
+<motion.div
+  className="flex-1 relative w-full h-80 md:h-[600px] rounded-xl overflow-hidden border border-white/10 shadow-lg group"
+  initial={{ opacity: 0, x: -50 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.7 }}
+  viewport={{ once: false, amount: 0.5 }}
+  onViewportEnter={() => setAboutInView(true)}
+  onViewportLeave={() => setAboutInView(false)}
+>
+  {/* IMAGE */}
+  <motion.img
+    key={aboutIndex}
+    src={aboutImages[aboutIndex].src}
+    alt="About carousel"
+    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.4 }}
+    drag="x"
+    dragConstraints={{ left: 0, right: 0 }}
+    onDragEnd={(_, info) => {
+      if (info.offset.x < -50) nextAbout();
+      if (info.offset.x > 50) prevAbout();
+    }}
+  />
 
+  {/* CAPTION */}
+  <motion.div
+    key={`caption-${aboutIndex}`}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="absolute bottom-6 left-6 right-6 bg-black/50 backdrop-blur px-4 py-2 rounded-md text-sm"
+  >
+    {aboutImages[aboutIndex].caption}
+  </motion.div>
+
+  {/* LEFT ARROW */}
+  <button
+    onClick={prevAbout}
+    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
+  >
+    ‹
+  </button>
+
+  {/* RIGHT ARROW */}
+  <button
+    onClick={nextAbout}
+    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
+  >
+    ›
+  </button>
+
+  {/* DOTS */}
+  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+    {aboutImages.map((_, i) => (
+      <button
+        key={i}
+        onClick={() => setAboutIndex(i)}
+        className={`h-2 w-2 rounded-full transition ${
+          i === aboutIndex ? "bg-white" : "bg-white/40"
+        }`}
+      />
+    ))}
+  </div>
+</motion.div>
           <div className="flex-1 space-y-6">
             <motion.h2
               className="text-3xl font-semibold mb-4"
@@ -143,7 +272,7 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 0.2 }}
               viewport={{ once: false }}
             >
-              I’m an IT student passionate about building modern web applications with clean design, smooth animations, and real-world functionality.
+              I’m an IT student passionate about building modern web applications with clean design, smooth animations, and real-world functionality. Can work under pressure (barely).
             </motion.p>
 
             {/* Strengths, Journey, Interests */}
@@ -166,6 +295,7 @@ export default function Home() {
                 </p>
               </motion.div>
             ))}
+            <EducationTimeline />
           </div>
         </div>
       </motion.section>
@@ -200,36 +330,67 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* ================= GALLERY SECTION ================= */}
-      <motion.section
-        id="gallery"
-        className="min-h-screen py-20"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: false }}
-      >
-        <h2 className="text-3xl font-semibold mb-8">Gallery</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          {gallery.map((img, index) => (
-            <motion.div
-              key={index}
-              onClick={() => { setSelectedImage(img); setImageOpen(true); }}
-              className="rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition"
-              whileHover={{ scale: 1.05 }}
-            >
-              <Image
-                src={`/${img.src}`}
-                alt={img.alt}
-                width={300}
-                height={200}
-                className="object-cover"
-              />
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+{/* ================= GALLERY SECTION ================= */}
+<motion.section
+  id="gallery"
+  className="min-h-screen py-20"
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.7 }}
+  viewport={{ once: false }}
+>
+  <h2 className="text-3xl font-semibold mb-8">Gallery</h2>
 
+  <div className="relative">
+    <motion.div
+      className="flex gap-4 overflow-hidden"
+      ref={galleryRef}
+      drag="x"
+      dragConstraints={{ left: -galleryWidth, right: 0 }}
+    >
+      {gallery.map((img, index) => (
+        <motion.div
+          key={index}
+          onClick={() => { setSelectedImage(img); setImageOpen(true); }}
+          className="flex-shrink-0 w-64 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Image
+            src={`/${img.src}`}
+            alt={img.alt}
+            width={300}
+            height={200}
+            className="object-cover w-full h-full"
+          />
+        </motion.div>
+      ))}
+
+      {/* Duplicate items for infinite scroll effect */}
+      {gallery.map((img, index) => (
+        <motion.div
+          key={`dup-${index}`}
+          className="flex-shrink-0 w-64 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden cursor-pointer opacity-0"
+        />
+      ))}
+    </motion.div>
+
+    {/* Left arrow */}
+    <button
+      onClick={() => scrollGallery(-1)}
+      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full hover:bg-black/70 transition z-10"
+    >
+      ‹
+    </button>
+
+    {/* Right arrow */}
+    <button
+      onClick={() => scrollGallery(1)}
+      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full hover:bg-black/70 transition z-10"
+    >
+      ›
+    </button>
+  </div>
+</motion.section>
       {selectedImage && (
         <ImageModal
           open={imageOpen}
@@ -249,9 +410,7 @@ export default function Home() {
         viewport={{ once: false }}
       >
         <h2 className="text-3xl font-semibold mb-8">
-          <span className="italic">
-            Journal (Click inside the popup for full view and auto next images)
-          </span>
+            Journal
         </h2>
         <div className="space-y-6 max-w-3xl">
           {journal.map((entry, index) => (
@@ -321,5 +480,7 @@ export default function Home() {
         </form>
       </motion.section>
     </main>
+      )}
+    </>
   );
 }

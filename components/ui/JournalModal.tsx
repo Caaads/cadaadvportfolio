@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ImageModal from "./ImageModal";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -26,17 +26,9 @@ export default function JournalModal({ open, setOpen, entry }: JournalModalProps
 
   if (!entry) return null;
 
-  // Auto-next logic
-  useEffect(() => {
-    if (!open) return;
-    const interval = setInterval(() => {
-      setImageIndex((prev) => (prev + 1) % entry.images.length);
-    }, 3000); // change image every 3 seconds
-    return () => clearInterval(interval);
-  }, [open, entry.images.length]);
-
   const nextImage = () =>
     setImageIndex((prev) => (prev + 1) % entry.images.length);
+
   const prevImage = () =>
     setImageIndex((prev) =>
       prev === 0 ? entry.images.length - 1 : prev - 1
@@ -50,8 +42,11 @@ export default function JournalModal({ open, setOpen, entry }: JournalModalProps
             <DialogTitle className="text-2xl">{entry.day}</DialogTitle>
           </DialogHeader>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            {/* IMAGE CAROUSEL */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {/* IMAGE VIEW */}
             <div className="relative mb-4 w-full h-64 rounded-md overflow-hidden">
               <img
                 src={`/${entry.images[imageIndex]}`}
@@ -60,35 +55,39 @@ export default function JournalModal({ open, setOpen, entry }: JournalModalProps
                 className="w-full h-full object-cover cursor-pointer rounded-md"
               />
 
-              {/* LEFT ARROW */}
-              <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
-              >
-                <ChevronLeft />
-              </button>
+              {/* LEFT */}
+              {entry.images.length > 1 && (
+                <button
+                  onClick={prevImage}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
+                >
+                  <ChevronLeft />
+                </button>
+              )}
 
-              {/* RIGHT ARROW */}
-              <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
-              >
-                <ChevronRight />
-              </button>
+              {/* RIGHT */}
+              {entry.images.length > 1 && (
+                <button
+                  onClick={nextImage}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
+                >
+                  <ChevronRight />
+                </button>
+              )}
             </div>
 
-            {/* COMPANY & DATE */}
+            {/* META */}
             <p className="text-muted-foreground mb-2">
               <span className="font-medium">{entry.company}</span> — {entry.date}
             </p>
 
-            {/* TEXT */}
+            {/* BODY */}
             <p className="text-muted-foreground">{entry.text}</p>
           </motion.div>
         </DialogContent>
       </Dialog>
 
-      {/* FULL IMAGE VIEW */}
+      {/* FULL IMAGE MODAL */}
       {fullImageOpen && (
         <ImageModal
           open={fullImageOpen}
