@@ -122,6 +122,16 @@ html {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+.gallery-scroll {
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.gallery-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 
 
 @layer base {

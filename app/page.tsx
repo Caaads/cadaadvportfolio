@@ -10,6 +10,8 @@ import { projects, certificates, gallery, journal, education} from "@/constants/
 import TechStackSlider from "@/components/ui/TechStackSlider";
 import PortfolioLoader from "@/components/ui/PortfolioLoader";
 import EducationTimeline from "@/components/ui/EducationalTimeline";
+const infiniteGallery = [...gallery, ...gallery];
+
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -23,6 +25,11 @@ export default function Home() {
 
   const [loading, setLoading] = useState(true);
   const [showSkip, setShowSkip] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
 const aboutImages = [
   { src: "/profile.jpg", caption: "Focused on clean UI and real-world systems" },
   { src: "/profile2.jpg", caption: "Achieving excellence in every project" },
@@ -61,19 +68,35 @@ useEffect(() => {
 }, [loading]);
 
 const galleryRef = useRef<HTMLDivElement>(null);
-const [galleryWidth, setGalleryWidth] = useState(0);
+const [isHovering, setIsHovering] = useState(false);
+
+// Duplicate gallery for seamless loop
+const infiniteGallery = [...gallery, ...gallery];
 
 useEffect(() => {
-  if (galleryRef.current) {
-    setGalleryWidth(galleryRef.current.scrollWidth - galleryRef.current.offsetWidth);
-  }
-}, [galleryRef.current, gallery.length]);
+  const el = galleryRef.current;
+  if (!el) return;
 
-const scrollGallery = (direction: number) => {
-  if (!galleryRef.current) return;
-  const scrollAmount = 400; // adjust for card width
-  galleryRef.current.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
-};
+  let animationFrame: number;
+
+  const autoScroll = () => {
+    if (!isHovering) {
+      el.scrollLeft += 0.6; // speed (lower = slower)
+
+      // Seamless reset
+      if (el.scrollLeft >= el.scrollWidth / 2) {
+        el.scrollLeft = 0;
+      }
+    }
+    animationFrame = requestAnimationFrame(autoScroll);
+  };
+
+  animationFrame = requestAnimationFrame(autoScroll);
+
+  return () => cancelAnimationFrame(animationFrame);
+}, [isHovering]);
+
+
 
 
   return (
@@ -207,8 +230,6 @@ const scrollGallery = (direction: number) => {
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.4 }}
-    drag="x"
-    dragConstraints={{ left: 0, right: 0 }}
     onDragEnd={(_, info) => {
       if (info.offset.x < -50) nextAbout();
       if (info.offset.x > 50) prevAbout();
@@ -341,18 +362,24 @@ const scrollGallery = (direction: number) => {
 >
   <h2 className="text-3xl font-semibold mb-8">Gallery</h2>
 
-  <div className="relative">
-    <motion.div
-      className="flex gap-4 overflow-hidden"
+  <div
+    className="relative"
+    onMouseEnter={() => setIsHovering(true)}
+    onMouseLeave={() => setIsHovering(false)}
+  >
+    {/* SCROLLER */}
+    <div
       ref={galleryRef}
-      drag="x"
-      dragConstraints={{ left: -galleryWidth, right: 0 }}
+      className="flex gap-4 gallery-scroll"
     >
-      {gallery.map((img, index) => (
+      {infiniteGallery.map((img, index) => (
         <motion.div
           key={index}
-          onClick={() => { setSelectedImage(img); setImageOpen(true); }}
-          className="flex-shrink-0 w-64 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition"
+          onClick={() => {
+            setSelectedImage(img);
+            setImageOpen(true);
+          }}
+          className="flex-shrink-0 w-64 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden cursor-pointer"
           whileHover={{ scale: 1.05 }}
         >
           <Image
@@ -364,33 +391,37 @@ const scrollGallery = (direction: number) => {
           />
         </motion.div>
       ))}
+    </div>
 
-      {/* Duplicate items for infinite scroll effect */}
-      {gallery.map((img, index) => (
-        <motion.div
-          key={`dup-${index}`}
-          className="flex-shrink-0 w-64 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden cursor-pointer opacity-0"
-        />
-      ))}
-    </motion.div>
-
-    {/* Left arrow */}
+    {/* LEFT ARROW */}
     <button
-      onClick={() => scrollGallery(-1)}
+      onClick={() =>
+        galleryRef.current?.scrollBy({
+          left: -400,
+          behavior: "smooth",
+        })
+      }
       className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full hover:bg-black/70 transition z-10"
     >
       ‹
     </button>
 
-    {/* Right arrow */}
+    {/* RIGHT ARROW */}
     <button
-      onClick={() => scrollGallery(1)}
+      onClick={() =>
+        galleryRef.current?.scrollBy({
+          left: 400,
+          behavior: "smooth",
+        })
+      }
       className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full hover:bg-black/70 transition z-10"
     >
       ›
     </button>
   </div>
 </motion.section>
+
+
       {selectedImage && (
         <ImageModal
           open={imageOpen}
@@ -449,36 +480,70 @@ const scrollGallery = (direction: number) => {
       )}
 
       {/* ================= CONTACT SECTION ================= */}
-      <motion.section
-        id="contact"
-        className="min-h-screen py-20"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: false }}
-      >
-        <h2 className="text-3xl font-semibold mb-8">Contact</h2>
-        <form className="max-w-md space-y-4">
-          <input
-            className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
-            placeholder="Your name"
-          />
-          <input
-            className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
-            placeholder="Your email"
-          />
-          <textarea
-            className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
-            placeholder="Message"
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 rounded-md bg-white text-black font-medium hover:opacity-90 transition"
-          >
-            Send Message
-          </button>
-        </form>
-      </motion.section>
+<motion.section
+  id="contact"
+  className="min-h-screen py-20"
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.7 }}
+  viewport={{ once: false }}
+>
+  <h2 className="text-3xl font-semibold mb-8">Contact</h2>
+
+  <form
+    className="max-w-md space-y-4"
+    onSubmit={async (e) => {
+      e.preventDefault();
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, message }),
+        });
+        if (res.ok) {
+          alert("Message sent!");
+          setName("");
+          setEmail("");
+          setMessage("");
+        } else {
+          alert("Failed to send message");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error sending message");
+      }
+    }}
+  >
+    <input
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
+      placeholder="Your name"
+      required
+    />
+    <input
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
+      placeholder="Your email"
+      type="email"
+      required
+    />
+    <textarea
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
+      placeholder="Message"
+      required
+    />
+    <button
+      type="submit"
+      className="px-6 py-2 rounded-md bg-white text-black font-medium hover:opacity-90 transition"
+    >
+      Send Message
+    </button>
+  </form>
+</motion.section>
     </main>
       )}
     </>
