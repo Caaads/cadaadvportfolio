@@ -99,6 +99,7 @@ export const journal = [
     images: [
       "rivanit.jpg",
       "RIVANIT DAY 3.jpg",
+      "RIVANIT DAY 3(2).jpg",
     ],
   },
     {

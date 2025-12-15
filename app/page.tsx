@@ -10,6 +10,9 @@ import { projects, certificates, gallery, journal, education} from "@/constants/
 import TechStackSlider from "@/components/ui/TechStackSlider";
 import PortfolioLoader from "@/components/ui/PortfolioLoader";
 import EducationTimeline from "@/components/ui/EducationalTimeline";
+import Particles from "react-tsparticles";
+
+
 const infiniteGallery = [...gallery, ...gallery];
 
 
@@ -118,17 +121,31 @@ useEffect(() => {
 
       {/* ================= MAIN SITE ================= */}
       {!loading && (
-    <main className="max-w-6xl mx-auto px-4 pt-16 scroll-smooth">
+<main className="max-w-6xl mx-auto px-4 pt-16 scroll-smooth relative">
+  {/* Background particles */}
+  <Particles
+    className="absolute inset-0 -z-10"
+    options={{
+      particles: {
+        number: { value: 50 },
+        size: { value: 3 },
+        move: { speed: 0.5 },
+      },
+      interactivity: {
+        events: { onHover: { enable: true, mode: "repulse" } },
+      },
+    }}
+  />
 
       {/* ================= HERO SECTION ================= */}
-      <motion.section
-        id="hero"
-        className="min-h-screen flex flex-col md:flex-row items-center justify-between gap-12"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: false }}
-      >
+  <motion.section
+    id="hero"
+    className="min-h-screen flex flex-col md:flex-row items-center justify-between gap-12"
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.7 }}
+    viewport={{ once: false }}
+  >
         <motion.div className="flex-1">
           <h1 className="text-5xl md:text-6xl font-bold mb-4">
             Alfred Mari Infiesto Cada
