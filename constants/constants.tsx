@@ -14,7 +14,7 @@ export const projects = [
     description:
       "Our WS101 project. A web-based Monitoring system for student partnerships and internships with role-based access.",
     live: "",
-    github: "https://github.com/Caaads/WSFINAL.git",
+    github: "https://github.com/Caaads/WS",
     tech: ["React","Django", "Python", "HTML", "CSS", "Javascript"],
   },
   {
