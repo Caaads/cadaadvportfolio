@@ -479,7 +479,7 @@ useEffect(() => {
         viewport={{ once: false }}
       >
         <h2 className="text-3xl font-semibold mb-8">
-            Journal
+            Journals (Click to view other images of the day with scanned journal, and click to view the full image)
         </h2>
         <div className="space-y-6 max-w-3xl">
           {journal.map((entry, index) => (
