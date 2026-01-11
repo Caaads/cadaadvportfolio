@@ -1,6 +1,19 @@
 
 
-export const projects = [
+export interface Project {
+  title: string;
+  description: string;
+  images: string[];
+  problem: string;
+  solution: string;
+  features: string[];
+  role: string;
+  live: string;
+  github: string;
+  tech: string[];
+}
+
+export const projects: Project[] = [
   // HIDE FOR NOW BASIN MAKITA NI SIR OWEN
   // {
   //   title: "Locker Management System",
@@ -13,13 +26,11 @@ export const projects = [
     title: "HCDC OSA PARTNERSHIP PORTAL (UNFINISHED)",
     description:
       "Our WS101 project. A web-based Monitoring system for student partnerships and internships with role-based access.",
-    images : ["/projects/hcdc-osa-1.png", "/projects/hcdc-osa-2.png"],
+    images: [],
     problem:
       "The current manual process of managing student partnerships and internships at Holy Cross of Davao College's Office of Student Affairs (OSA) is inefficient, error-prone, and lacks real-time tracking capabilities.",
     solution:
       "Develop a web-based Monitoring System that automates the management of student partnerships and internships, providing role-based access for OSA staff, partners, and students.",
-    outcome:
-      "The implementation of the HCDC OSA Partnership Portal has streamlined the management of student partnerships and internships, resulting in improved efficiency, reduced errors, and enhanced tracking capabilities.",
     features: [
       "Role-Based Access Control: Different access levels for OSA staff, partners, and students.",
     ],
@@ -32,7 +43,23 @@ export const projects = [
     title: "ShapeLift",
     description:
       "Our ADV101 project. A shopee inspired e-commerce platform that allows users to buy gym related products. (Current source code not found)",
-    
+    images: [
+      "shapelift.png",
+      "shapelift2.png",
+      "shapelift3.png",
+      "shapelift4.png",
+    ],
+    problem:
+      "Non-existent online platform for purchasing gym-related products, limiting accessibility and convenience for fitness enthusiasts.",
+    solution:
+      "Develop a user-friendly e-commerce website that offers a wide range of gym-related products, secure payment options, and efficient delivery services.",
+    features: [
+      "Product Catalog: Browse and search for gym-related products with detailed descriptions and images.",
+      "User Accounts: Create and manage user profiles, order history, and wishlists.",
+      "Shopping Cart: Add products to cart, modify quantities, and proceed to checkout seamlessly.",
+      "Add to favorites: Users can add products to their favorites for easy access later.",
+    ],
+    role: "Full-Stack Developer",    
     live: "https://shapelift.vercel.app",
     github: "https://github.com/Caaads",
     tech: ["HTML", "CSS", "Javascript"],
@@ -41,25 +68,114 @@ export const projects = [
     title: "ShapeLift Mobile with Cloud Firestore Database",
     description:
       "A react native app that allows users to buy gym related products. Our ADV102 project.",
+    images: [],
+    problem:
+      "Non-existent mobile platform for purchasing gym-related products, limiting accessibility and convenience for fitness enthusiasts on mobile devices.",
+    solution:
+      "Develop a mobile application that offers a wide range of gym-related products, secure payment options, and efficient delivery services.",
+    features: [
+      "Product Catalog: Browse and search for gym-related products with detailed descriptions and images.",
+      "User Accounts: Create and manage user profiles, order history, and wishlists.",
+      "Shopping Cart: Add products to cart, modify quantities, and proceed to checkout seamlessly.",
+      "Add to favorites: Users can add products to their favorites for easy access later.",
+    ],
+    role: "Full-Stack Developer",
     live: "",
     github: "https://github.com/Caaads/ADV-SHAPELIFT.git",
     tech: ["ReactNative", "Firebase", "Typescript", "Javascript"],
   },
 ]
 export const certificates = [
-    { src: "IMCODECHUM.png", alt: "Certificate 1" },
-    { src: "JAVASCRIPT.png", alt: "Certificate 2" },
-    { src: "TARSIER.jpg", alt: "Certificate 3" },
-    { src: "WATT.jpg", alt: "Certificate 3" },
-    { src: "pythoncert.png", alt: "Certificate 4" },
-    { src: "msexcelcert.png", alt: "Certificate 5" },
-    { src: "IoTcert.png", alt: "Certificate 6" },
-    { src: "comnetworkingcert.png", alt: "Certificate 7" },
-    { src: "reactjscert.png", alt: "Certificate 8" },
-    { src: "introtohtmlcert.png", alt: "Certificate 9" },
-    { src: "angularbasicscert.png", alt: "Certificate 10" },
-    
+  {
+    src: "IMCODECHUM.png",
+    alt: "IMCODECHUM Certificate",
+    title: "IMCODECHUM Training Completion",
+    issuer: "CODECHUM",
+    date: "May 16, 2025",
+    description: "Completed training on CODECHUM platform covering SQL fundamentals and best practices.",
+  },
+  {
+    src: "JAVASCRIPT.png",
+    alt: "JavaScript Certificate",
+    title: "JavaScript Programming Certificate",
+    issuer: "BitDegree",
+    date: "Dec. 1, 2023",
+    description: "Certified in JavaScript fundamentals and advanced concepts including DOM manipulation and ES6+ features.",
+  },
+  {
+    src: "TARSIER.jpg",
+    alt: "TARSIER Certificate",
+    title: "TARSIER 117",
+    issuer: "TARSIER 117",
+    date: "Nov. 15, 2025",
+    description: "Completed seminar at T.A.R.S.I.E.R. 117, focusing on disaster preparedness and first aid.",
+  },
+  {
+    src: "WATT.jpg",
+    alt: "WATT Certificate",
+    title: "WATT Tech Training",
+    issuer: "WATT Technologies",
+    date: "Nov. 15, 2025",
+    description: "Completed technical training on IoT sensors and energy-efficient devices.",
+  },
+  {
+    src: "pythoncert.png",
+    alt: "Python Certificate",
+    title: "Python Programming Certificate",
+    issuer: "Cisco Networking Academy",
+    date: "Jan. 2, 2026",
+    description: "Certified in Python programming, covering data structures, and OOP concepts.",
+  },
+  {
+    src: "msexcelcert.png",
+    alt: "MS Excel Certificate",
+    title: "Microsoft Excel Basics",
+    issuer: "Coursera",
+    date: "Jan. 2, 2026",
+    description: "Basic fundamentals of Microsoft Excel including formulas, functions, and data visualization.",
+  },
+  {
+    src: "IoTcert.png",
+    alt: "IoT Certificate",
+    title: "Internet of Things Fundamentals",
+    issuer: "Coursera",
+    date: "Jan. 2, 2026",
+    description: "Learned core IoT concepts, networking, and device management.",
+  },
+  {
+    src: "comnetworkingcert.png",
+    alt: "Computer Networking Certificate",
+    title: "Computer Networking Essentials",
+    issuer: "Cisco Networking Academy",
+    date: "Jan. 2, 2026",
+    description: "Covered networking protocols, IP addressing, and configuration of network devices.",
+  },
+  {
+    src: "reactjscert.png",
+    alt: "ReactJS Certificate",
+    title: "ReactJS Frontend Development",
+    issuer: "SimpliLearn Skillup",
+    date: "Jan. 3, 2026",
+    description: "Completed ReactJS course, including hooks, state management, and component design.",
+  },
+  {
+    src: "introtohtmlcert.png",
+    alt: "HTML Certificate",
+    title: "HTML5 Fundamentals",
+    issuer: "SimpliLearn Skillup",
+    date: "Jan. 10, 2026",
+    description: "Certified in HTML5, semantic tags, forms, and basic web page structure.",
+  },
+  {
+    src: "angularbasicscert.png",
+    alt: "Angular Basics Certificate",
+    title: "Angular Basics",
+    issuer: "SimpliLearn Skillup",
+    date: "Jan 10, 2026",
+    description: "Introduction to Angular framework including components, modules, and services.",
+  },
 ];
+
 
 export const gallery = [
   { src: "gallery1.jpg", alt: "Airport before flight to Cebu" },
@@ -173,3 +289,4 @@ export const scannedDocs = [
   { src: "MATA DAY 4.jpg", alt: "Scanned Journal MATA" },
   { src: "TARSIER DAY 5.jpg", alt: "Scanned Journal TARSIER" },
 ];
+

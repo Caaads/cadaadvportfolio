@@ -4,42 +4,29 @@ import Image from "next/image";
 import { motion, AnimatePresence  } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import ProjectModal from "@/components/ui/ProjectModal";
-import ImageModal from "@/components/ui/ImageModal";
-import JournalModal from "@/components/ui/JournalModal";
-import { projects, certificates, gallery, journal, education, scannedDocs} from "@/constants/constants";
+import { projects, type Project, certificates, gallery, journal, education, scannedDocs} from "@/constants/constants";
 import TechStackSlider from "@/components/ui/TechStackSlider";
 import PortfolioLoader from "@/components/ui/PortfolioLoader";
 import EducationTimeline from "@/components/ui/EducationalTimeline";
 import Particles from "react-tsparticles";
 import { FaLinkedin, FaGithub, FaFacebook, FaInstagram, FaDev } from "react-icons/fa";
-import ScannedModal from "@/components/ui/ScannedModal";
-
-
-const infiniteGallery = [...gallery, ...gallery];
-
+import CertificateModal from "@/components/ui/certificatemodal";
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<typeof projects[0] | null>(null);
+const [open, setOpen] = useState(false);
+const [selected, setSelected] = useState<Project | null>(null);
 
-  const [imageOpen, setImageOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
+const [loading, setLoading] = useState(true);
+const [showSkip, setShowSkip] = useState(false);
+const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null);
+const [imageOpen, setImageOpen] = useState(false);
 
-  const [journalOpen, setJournalOpen] = useState(false);
-  const [selectedJournal, setSelectedJournal] = useState<typeof journal[0] | null>(null);
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+const [message, setMessage] = useState("");
 
-  const [loading, setLoading] = useState(true);
-  const [showSkip, setShowSkip] = useState(false);
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-
-const [activeTab, setActiveTab] = useState<'journal' | 'scanned'>('journal');
-const [selectedScan, setSelectedScan] = useState<null | { src: string; alt: string }>(null);
-const [scanOpen, setScanOpen] = useState(false);
-
-
+const [selectedCertificate, setSelectedCertificate] = useState<typeof certificates[0] | null>(null);
+const [certModalOpen, setCertModalOpen] = useState(false);
 
 const aboutImages = [
   { src: "/profile.jpg", caption: "Focused on clean UI and real-world systems" },
@@ -196,6 +183,17 @@ useEffect(() => {
         Contact Me
       </a>
     </div>
+
+    <div className="flex gap-4 mt-4">
+    <a
+  href="/educational-tour"
+  className="px-6 py-3 rounded-md border border-white/20 hover:bg-white/10 transition"
+>
+  Educational Tour
+</a>
+</div>
+
+    
   </motion.div>
 
   {/* Right side - Profile Image */}
@@ -368,261 +366,42 @@ useEffect(() => {
       </motion.section>
 
       {/* ================= CERTIFICATES SECTION ================= */}
-      <motion.section
-        id="certificates"
-        className="min-h-screen py-20"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        viewport={{ once: false }}
-      >
-        <h2 className="text-3xl font-semibold mb-8">Certificates</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {certificates.map((cert, index) => (
-            <motion.div
-              key={index}
-              onClick={() => { setSelectedImage(cert); setImageOpen(true); }}
-              className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur p-2 cursor-pointer hover:scale-105 transition"
-              whileHover={{ scale: 1.05 }}
-            >
-              <Image
-                src={`/${cert.src}`}
-                alt={cert.alt}
-                width={300}
-                height={200}
-                className="object-cover"
-              />
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
-
-{/* ================= GALLERY SECTION ================= */}
 <motion.section
-  id="gallery"
+  id="certificates"
   className="min-h-screen py-20"
   initial={{ opacity: 0, y: 20 }}
   whileInView={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.7 }}
   viewport={{ once: false }}
 >
-  <h2 className="text-3xl font-semibold mb-8">Gallery</h2>
-
-  <div
-    className="relative"
-    onMouseEnter={() => setIsHovering(true)}
-    onMouseLeave={() => setIsHovering(false)}
-  >
-    {/* SCROLLER */}
-    <div
-      ref={galleryRef}
-      className="flex gap-4 gallery-scroll"
-    >
-      {infiniteGallery.map((img, index) => (
-        <motion.div
-          key={index}
-          onClick={() => {
-            setSelectedImage(img);
-            setImageOpen(true);
-          }}
-          className="flex-shrink-0 w-64 h-40 md:w-72 md:h-48 rounded-xl overflow-hidden cursor-pointer"
-          whileHover={{ scale: 1.05 }}
-        >
-          <Image
-            src={`/${img.src}`}
-            alt={img.alt}
-            width={300}
-            height={200}
-            className="object-cover w-full h-full"
-          />
-        </motion.div>
-      ))}
-    </div>
-
-    {/* LEFT ARROW */}
-    <button
-      onClick={() =>
-        galleryRef.current?.scrollBy({
-          left: -400,
-          behavior: "smooth",
-        })
-      }
-      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full hover:bg-black/70 transition z-10"
-    >
-      ‹
-    </button>
-
-    {/* RIGHT ARROW */}
-    <button
-      onClick={() =>
-        galleryRef.current?.scrollBy({
-          left: 400,
-          behavior: "smooth",
-        })
-      }
-      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 p-2 rounded-full hover:bg-black/70 transition z-10"
-    >
-      ›
-    </button>
-  </div>
-</motion.section>
-
-
-      {selectedImage && (
-        <ImageModal
-          open={imageOpen}
-          setOpen={setImageOpen}
-          src={selectedImage.src}
-          alt={selectedImage.alt}
+  <h2 className="text-3xl font-semibold mb-8">Certificates</h2>
+  <div className="grid md:grid-cols-3 gap-6">
+    {certificates.map((cert, index) => (
+      <motion.div
+        key={index}
+        onClick={() => { setSelectedCertificate(cert); setCertModalOpen(true); }}
+        className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur p-2 cursor-pointer hover:scale-105 transition"
+        whileHover={{ scale: 1.05 }}
+      >
+        <Image
+          src={`/${cert.src}`}
+          alt={cert.alt}
+          width={300}
+          height={200}
+          className="object-cover"
         />
-      )}
-
-{/* ================= JOURNALS & SCANNED SECTION ================= */}
-<motion.section
-  id="journal"
-  className="min-h-screen py-20"
-  initial={{ opacity: 0, y: 20 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.7 }}
-  viewport={{ once: false }}
->
-  <h2 className="text-3xl font-semibold mb-4">
-    Journals & Scanned Documents
-  </h2>
-
-  {/* ================= STICKY TABS ================= */}
-<div className="sticky top-28 z-30 bg-background/80 backdrop-blur rounded-xl pt-4 pb-4 mb-6 pl-3">
-    <div className="flex gap-2">
-      <button
-        onClick={() => setActiveTab('journal')}
-        className={`px-5 py-2 rounded-full text-sm font-medium transition
-          ${activeTab === 'journal'
-            ? 'bg-white text-black'
-            : 'bg-white/10 text-white hover:bg-white/20'
-          }`}
-      >
-        Journal
-      </button>
-
-      <button
-        onClick={() => setActiveTab('scanned')}
-        className={`px-5 py-2 rounded-full text-sm font-medium transition
-          ${activeTab === 'scanned'
-            ? 'bg-white text-black'
-            : 'bg-white/10 text-white hover:bg-white/20'
-          }`}
-      >
-        Scanned
-      </button>
-    </div>
+      </motion.div>
+    ))}
   </div>
-
-  {/* ================= CONTEXT TEXT ================= */}
-  <p className="text-sm text-muted-foreground mb-8 max-w-3xl">
-    {activeTab === 'journal'
-      ? 'Daily reflections, learnings, and experiences during the educational tour.'
-      : 'Official scanned journals documenting each day of the educational tour.'}
-  </p>
-
-  <AnimatePresence mode="wait">
-    {/* ================= JOURNAL TAB ================= */}
-    {activeTab === 'journal' && (
-      <motion.div
-        key="journal"
-        initial={{ x: -40, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: 40, opacity: 0 }}
-        transition={{ duration: 0.4 }}
-        className="space-y-6 max-w-3xl"
-      >
-        {journal.map((entry, index) => (
-          <motion.div
-            key={index}
-            onClick={() => {
-              setSelectedJournal(entry);
-              setJournalOpen(true);
-            }}
-            whileHover={{ scale: 1.05 }}
-            className="border border-white/10 rounded-xl p-4 bg-white/5 backdrop-blur flex flex-col md:flex-row gap-4 cursor-pointer"
-          >
-            <div className="flex-shrink-0 w-full md:w-48 h-32 relative rounded-md overflow-hidden">
-              <Image
-                src={`/${entry.images[0]}`}
-                alt={entry.company}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold">{entry.day}</h3>
-              <p className="text-sm text-muted-foreground mb-2">
-                <span className="font-medium">{entry.company}</span> — {entry.date}
-              </p>
-              <p className="text-muted-foreground">{entry.text}</p>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
-    )}
-
-    {/* ================= SCANNED TAB ================= */}
-    {activeTab === 'scanned' && (
-      <motion.div
-        key="scanned"
-        initial={{ x: 40, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        exit={{ x: -40, opacity: 0 }}
-        transition={{ duration: 0.4 }}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl"
-      >
-{scannedDocs.map((doc, index) => (
-  <motion.div
-    key={index}
-    whileHover={{ scale: 1.03 }}
-    onClick={() => {
-      setSelectedScan(doc);
-      setScanOpen(true);
-    }}
-    className="cursor-pointer space-y-2"
-  >
-    <Image
-      src={`/${doc.src}`}
-      alt={doc.alt}
-      width={400}
-      height={300}
-      className="rounded-md object-cover"
-    />
-    <p className="text-sm text-muted-foreground text-center">
-      {doc.alt}
-    </p>
-  </motion.div>
-))}
-
-      </motion.div>
-    )}
-  </AnimatePresence>
 </motion.section>
 
-{/* ================= JOURNAL MODAL ================= */}
-{selectedJournal && (
-  <JournalModal
-    open={journalOpen}
-    setOpen={setJournalOpen}
-    entry={selectedJournal}
+{selectedCertificate && (
+  <CertificateModal
+    open={certModalOpen}
+    setOpen={setCertModalOpen}
+    certificate={selectedCertificate}
   />
 )}
-
-{/* ================= SCANNED IMAGE MODAL ================= */}
-{selectedScan && (
-  <ScannedModal
-    open={scanOpen}
-    setOpen={setScanOpen}
-    scan={selectedScan}
-  />
-)}
-
-
 
 
       {/* ================= CONTACT SECTION ================= */}

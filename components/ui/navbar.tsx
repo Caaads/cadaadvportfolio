@@ -1,15 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
-const sections = ["projects", "about", "certificates", "gallery", "journal", "contact"];
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [active, setActive] = useState("");
 
   const { scrollYProgress } = useScroll();
@@ -18,6 +23,15 @@ export default function Navbar() {
     damping: 30,
   });
 
+  // Sections per page
+  const sectionsMap: Record<string, string[]> = {
+    "/": ["projects", "about", "certificates", "contact"],
+    "/educational-tour": ["gallery", "journal"],
+  };
+
+  const sections = sectionsMap[pathname] || [];
+
+  // Active section tracking (scroll highlight)
   useEffect(() => {
     const handler = () => {
       sections.forEach((id) => {
@@ -32,7 +46,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
-  }, []);
+  }, [sections]);
 
   return (
     <>
@@ -52,9 +66,18 @@ export default function Navbar() {
             Cads
           </Link>
 
-          <nav className="hidden md:flex gap-6 text-sm">
-            {sections.map((id) => (
+          {/* Desktop nav */}
+          <nav className="hidden md:flex gap-6 text-sm items-center">
+            {pathname !== "/" && (
               <Link
+                href="/"
+                className="text-muted-foreground hover:text-foreground transition"
+              >
+                Back to Main
+              </Link>
+            )}
+            {sections.map((id) => (
+              <a
                 key={id}
                 href={`#${id}`}
                 className={`transition ${
@@ -64,10 +87,11 @@ export default function Navbar() {
                 }`}
               >
                 {id.charAt(0).toUpperCase() + id.slice(1)}
-              </Link>
+              </a>
             ))}
           </nav>
 
+          {/* Mobile nav */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -75,11 +99,21 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <nav className="flex flex-col gap-6 mt-10">
-                {sections.map((id) => (
-                  <Link key={id} href={`#${id}`}>
-                    {id}
+              {/* Accessibility: Add a title for screen readers */}
+              <SheetTitle className="text-lg font-semibold mb-4">
+                Navigation Menu
+              </SheetTitle>
+
+              <nav className="flex flex-col gap-6 mt-2">
+                {pathname !== "/" && (
+                  <Link href="/">
+                    Back to Main
                   </Link>
+                )}
+                {sections.map((id) => (
+                  <a key={id} href={`#${id}`}>
+                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                  </a>
                 ))}
               </nav>
             </SheetContent>
