@@ -89,9 +89,9 @@ export const projects: Project[] = [
   title: "LetterLock Web Game with Bot Opponent(UNFINISHED)",
   description: "A browser-based 2-player word challenge game where players create words based on chosen letters. Prototype features a smart bot opponent for testing gameplay.(Single player testing for now, multiplayer in development)",
     images: [
-      "letterlock1.png",
-      "letterlock2.png",
-      "letterlock3.png",
+      "Letterlock1.png",
+      "Letterlock2.png",
+      "Letterlock3.png",
     ],
   problem: "No interactive, real-time word challenge web games that combine strategy, vocabulary skills, and timed responses in a simple competitive format.",
   solution: "Develop a responsive web game that allows players to pick letters, generate valid words under a timer, and compete against a bot or future multiplayer opponents, with real-time scoring and feedback.",
