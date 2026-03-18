@@ -32,7 +32,6 @@ const aboutImages = [
   { src: "/profile.jpg", caption: "Focused on clean UI and real-world systems" },
   { src: "/profile2.jpg", caption: "Achieving excellence in every project" },
   { src: "/profile3.jpg", caption: "Exploring tech with creativity" },
-  { src: "/profile4.jpg", caption: "Fitness, discipline, and consistency" },
 ];
 
 const [aboutIndex, setAboutIndex] = useState(0);

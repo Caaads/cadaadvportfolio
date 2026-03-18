@@ -23,6 +23,7 @@ import {
   SiShadcnui,
   SiApifox,
 } from "react-icons/si";
+import { RiSupabaseFill } from "react-icons/ri";
 
 export const techStack = [
   {
@@ -105,4 +106,9 @@ export const techStack = [
     name: "API",
     icon: SiApifox,
   },
+  {
+    name: "Supabase",
+    icon: RiSupabaseFill,
+  },
+
 ];

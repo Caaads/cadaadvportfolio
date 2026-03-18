@@ -86,8 +86,8 @@ export const projects: Project[] = [
     tech: ["ReactNative", "Firebase", "Typescript", "Javascript"],
   },
 {
-  title: "LetterLock Web Game with Bot Opponent(UNFINISHED)",
-  description: "A browser-based 2-player word challenge game where players create words based on chosen letters. Prototype features a smart bot opponent for testing gameplay.(Single player testing for now, multiplayer in development)",
+  title: "LetterLock Web Game with Bot Opponent",
+  description: "A browser-based 2-player word challenge game where players create words based on chosen letters. Prototype features a smart bot opponent for testing gameplay.",
     images: [
       "Letterlock1.png",
       "Letterlock2.png",
@@ -105,8 +105,73 @@ export const projects: Project[] = [
   role: "Full-Stack / Frontend Developer",
   live: "https://letterlock.vercel.app",
   github: "https://github.com/Caaads/LetterLock.git",
-  tech: ["HTML", "CSS", "Javascript"] // "Vanilla JS", "Datamuse API (optional)"
-}
+  tech: ["HTML", "CSS", "Javascript", "Supabase", "Socket.io", "Railway"] // "Vanilla JS", "Datamuse API (optional)"
+},
+{
+  title: "PeerProof - Anonymous Confession Wall (SOLD)",
+  description: "",
+    images: [
+      "PeerProof1.png",
+      "PeerProof2.png",
+    ],
+  problem: "Lack of anonymous platforms for students to share thoughts, confessions, and experiences without fear of judgment or repercussions.",
+  solution: "Create a web-based anonymous confession wall where students can post and read confessions, with features for upvoting, commenting, and reporting inappropriate content, fostering a sense of community and support.",
+  features: [
+    "Anonymous Posting: Users can submit confessions without revealing their identity.",
+    "Confession Wall: Display confessions in a feed format, allowing users to read and interact with posts.",
+    "Upvoting and Commenting: Users can upvote confessions they relate to and leave supportive comments.",
+    "Content Moderation: Implement reporting and moderation features to maintain a safe and respectful environment."
+  ],
+  role: "Full-Stack / Frontend Developer",
+  live: "https://peer-proof-ecru.vercel.app",
+  github: "https://github.com/JamesAsoy/PeerProof.git",
+  tech: ["HTML", "CSS", "Javascript", "Supabase"]
+},
+{
+  title: "SmartCart - Grocery List and Budget Tracker (SOLD)",
+  description: "A web application that helps users create and manage grocery lists while tracking their budget. Users can add items to their list, set prices, and monitor their spending in real-time to stay within their budget.",
+    images: [
+      "SmartCart1.png",
+      "SmartCart2.png",
+      "SmartCart3.png",
+      "SmartCart4.png",
+    ],
+  problem: "Difficulty in managing grocery shopping and budgeting, leading to overspending and inefficient shopping trips without a centralized tool to organize lists and track expenses.",
+  solution: "Develop a user-friendly web application that allows users to create grocery lists, assign prices to items, and track their spending against a set budget in real-time, providing insights and alerts to help them stay on track.",
+  features: [
+    "Grocery List Management: Users can create, edit, and delete grocery lists with item names and prices.",
+    "Budget Tracking: Set a budget for grocery shopping and track expenses in real-time as items are added to the list.",
+    "Spending Insights: Provide visual feedback on how much of the budget has been used and alert users when they are approaching or exceeding their budget.",
+    "User Accounts: Allow users to save their lists and budgets for future reference and easy access."
+  ],
+  role: "Full-Stack / Frontend Developer",
+  live: "https://smart-cart-ni-albai.vercel.app",
+  github: "https://github.com/jhondominicalbacite-wq/SmartCart.git",
+  tech: ["HTML", "CSS", "Javascript", "Supabase"]
+},
+{
+  title: "Votify - Simple Polling App with Real-Time Results (SOLD)",
+  description: "A web application that allows users to create and participate in simple polls with real-time results.",
+    images: [
+      "Votify1.png",
+      "Votify2.png", 
+      "Votify3.png",
+      "Votify4.png",
+      "Votify5.png",
+    ],
+  problem: "Lack of simple and accessible polling platforms for users to create and participate in polls, leading to difficulties in gathering opinions and making decisions based on collective input.",
+  solution: "Develop a user-friendly web application that allows users to create and participate in simple polls with real-time results, providing insights and alerts to help them stay on track.",
+  features: [
+    "Poll Creation: Users can create polls with a question and multiple answer options.",
+    "Real-Time Voting: Users can vote on polls and see results update in real-time.",
+    "Poll Management: Poll creators can edit or delete their polls, and view detailed results.",
+    "User Accounts: Allow users to save their polls and view their voting history for future reference and easy access."
+  ],
+  role: "Full-Stack / Frontend Developer",
+  live: "https://votify-eosin.vercel.app",
+  github: "https://github.com/Saiba401/Votify.git",
+  tech: ["HTML", "CSS", "Javascript", "Supabase"]
+},
 ]
 export const certificates = [
   {
