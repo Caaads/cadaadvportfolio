@@ -7,11 +7,14 @@ import Link from "next/link";
 import ThemeToggle from "./theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { useTheme } from "@/lib/hooks/use-theme";
+import { useBgAnimation } from "@/lib/context/bg-animation-context";
+import { LuSparkles } from "react-icons/lu";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isDark } = useTheme();
+  const { isBgAnimActive, toggleBgAnim } = useBgAnimation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,11 +78,32 @@ export default function Navbar() {
                 {item.text}
               </Link>
             ))}
+            <button
+              onClick={toggleBgAnim}
+              className={cn(
+                "p-2 rounded-full transition-all duration-300",
+                isBgAnimActive 
+                  ? "text-primary bg-primary/10" 
+                  : "text-muted-foreground hover:bg-muted"
+              )}
+              title={isBgAnimActive ? "Disable Background Animations" : "Enable Background Animations"}
+            >
+              <LuSparkles className={cn("w-4 h-4 transition-transform", isBgAnimActive && "animate-pulse")} />
+            </button>
             <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center space-x-4">
+            <button
+              onClick={toggleBgAnim}
+              className={cn(
+                "p-2 rounded-full transition-all",
+                isBgAnimActive ? "text-primary bg-primary/10" : "text-muted-foreground"
+              )}
+            >
+              <LuSparkles className="w-4 h-4" />
+            </button>
             <ThemeToggle />
             <Button
               variant="ghost"

@@ -9,7 +9,6 @@ import TechStackSlider from "@/components/ui/TechStackSlider";
 import PortfolioLoader from "@/components/ui/PortfolioLoader";
 import EducationTimeline from "@/components/ui/EducationalTimeline";
 import LiveActivity from "@/components/ui/LiveActivity";
-import Particles from "react-tsparticles";
 import { FaLinkedin, FaGithub, FaFacebook, FaInstagram, FaDev } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import CertificateModal from "@/components/ui/certificatemodal";
@@ -121,21 +120,6 @@ useEffect(() => {
       {/* ================= MAIN SITE ================= */}
       {!loading && (
 <main className="max-w-6xl mx-auto px-4 pt-16 scroll-smooth relative">
-  {/* Background particles */}
-  <Particles
-    className="absolute inset-0 -z-10"
-    options={{
-      particles: {
-        number: { value: 50 },
-        size: { value: 3 },
-        move: { speed: 0.5 },
-      },
-      interactivity: {
-        events: { onHover: { enable: true, mode: "repulse" } },
-      },
-    }}
-  />
-
 <motion.section
   id="hero"
   className="min-h-screen flex flex-col md:flex-row justify-between gap-10 pt-50"
