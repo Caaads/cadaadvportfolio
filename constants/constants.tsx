@@ -11,6 +11,7 @@ export interface Project {
   live: string;
   github: string;
   tech: string[];
+  soldTo?: string;
 }
 
 export const projects: Project[] = [
@@ -22,23 +23,23 @@ export const projects: Project[] = [
   //   live: "https://locker-system.infinityfreeapp.com/",
   //   github: "https://github.com/Caaads/lockerosa.git",
   // },
-  {
-    title: "HCDC OSA PARTNERSHIP PORTAL (UNFINISHED)",
-    description:
-      "Our WS101 project. A web-based Monitoring system for student partnerships and internships with role-based access.",
-    images: [],
-    problem:
-      "The current manual process of managing student partnerships and internships at Holy Cross of Davao College's Office of Student Affairs (OSA) is inefficient, error-prone, and lacks real-time tracking capabilities.",
-    solution:
-      "Develop a web-based Monitoring System that automates the management of student partnerships and internships, providing role-based access for OSA staff, partners, and students.",
-    features: [
-      "Role-Based Access Control: Different access levels for OSA staff, partners, and students.",
-    ],
-    role: "Full-Stack Developer",
-    live: "",
-    github: "https://github.com/Caaads/WS",
-    tech: ["React","Django", "Python", "HTML", "CSS", "Javascript"],
-  },
+  // {
+  //   title: "HCDC OSA PARTNERSHIP PORTAL (UNFINISHED)",
+  //   description:
+  //     "Our WS101 project. A web-based Monitoring system for student partnerships and internships with role-based access.",
+  //   images: [],
+  //   problem:
+  //     "The current manual process of managing student partnerships and internships at Holy Cross of Davao College's Office of Student Affairs (OSA) is inefficient, error-prone, and lacks real-time tracking capabilities.",
+  //   solution:
+  //     "Develop a web-based Monitoring System that automates the management of student partnerships and internships, providing role-based access for OSA staff, partners, and students.",
+  //   features: [
+  //     "Role-Based Access Control: Different access levels for OSA staff, partners, and students.",
+  //   ],
+  //   role: "Full-Stack Developer",
+  //   live: "",
+  //   github: "https://github.com/Caaads/WS",
+  //   tech: ["React","Django", "Python", "HTML", "CSS", "Javascript"],
+  // },
   {
     title: "ShapeLift",
     description:
@@ -65,26 +66,26 @@ export const projects: Project[] = [
     github: "https://github.com/Caaads",
     tech: ["HTML", "CSS", "Javascript"],
   },
-  {
-    title: "ShapeLift Mobile with Cloud Firestore Database",
-    description:
-      "A react native app that allows users to buy gym related products. Our ADV102 project.",
-    images: [],
-    problem:
-      "Non-existent mobile platform for purchasing gym-related products, limiting accessibility and convenience for fitness enthusiasts on mobile devices.",
-    solution:
-      "Develop a mobile application that offers a wide range of gym-related products, secure payment options, and efficient delivery services.",
-    features: [
-      "Product Catalog: Browse and search for gym-related products with detailed descriptions and images.",
-      "User Accounts: Create and manage user profiles, order history, and wishlists.",
-      "Shopping Cart: Add products to cart, modify quantities, and proceed to checkout seamlessly.",
-      "Add to favorites: Users can add products to their favorites for easy access later.",
-    ],
-    role: "Full-Stack Developer",
-    live: "",
-    github: "https://github.com/Caaads/ADV-SHAPELIFT.git",
-    tech: ["ReactNative", "Firebase", "Typescript", "Javascript"],
-  },
+  // {
+  //   title: "ShapeLift Mobile with Cloud Firestore Database",
+  //   description:
+  //     "A react native app that allows users to buy gym related products. Our ADV102 project.",
+  //   images: [],
+  //   problem:
+  //     "Non-existent mobile platform for purchasing gym-related products, limiting accessibility and convenience for fitness enthusiasts on mobile devices.",
+  //   solution:
+  //     "Develop a mobile application that offers a wide range of gym-related products, secure payment options, and efficient delivery services.",
+  //   features: [
+  //     "Product Catalog: Browse and search for gym-related products with detailed descriptions and images.",
+  //     "User Accounts: Create and manage user profiles, order history, and wishlists.",
+  //     "Shopping Cart: Add products to cart, modify quantities, and proceed to checkout seamlessly.",
+  //     "Add to favorites: Users can add products to their favorites for easy access later.",
+  //   ],
+  //   role: "Full-Stack Developer",
+  //   live: "",
+  //   github: "https://github.com/Caaads/ADV-SHAPELIFT.git",
+  //   tech: ["ReactNative", "Firebase", "Typescript", "Javascript"],
+  // },
 {
   title: "LetterLock Web Game with Bot Opponent",
   description: "A browser-based 2-player word challenge game where players create words based on chosen letters. Prototype features a smart bot opponent for testing gameplay.",
@@ -125,7 +126,8 @@ export const projects: Project[] = [
   role: "Full-Stack / Frontend Developer",
   live: "https://peer-proof-ecru.vercel.app",
   github: "https://github.com/JamesAsoy/PeerProof.git",
-  tech: ["HTML", "CSS", "Javascript", "Supabase"]
+  tech: ["HTML", "CSS", "Javascript", "Supabase"],
+  soldTo: "James David B. Asoy (HCDC BSIT STUDENT)"
 },
 {
   title: "SmartCart - Grocery List and Budget Tracker (SOLD)",
@@ -147,7 +149,8 @@ export const projects: Project[] = [
   role: "Full-Stack / Frontend Developer",
   live: "https://smart-cart-ni-albai.vercel.app",
   github: "https://github.com/jhondominicalbacite-wq/SmartCart.git",
-  tech: ["HTML", "CSS", "Javascript", "Supabase"]
+  tech: ["HTML", "CSS", "Javascript", "Supabase"],
+  soldTo: "Jhon Dominic B. Albacite (HCDC BSIT STUDENT)"
 },
 {
   title: "Votify - Simple Polling App with Real-Time Results (SOLD)",
@@ -170,7 +173,8 @@ export const projects: Project[] = [
   role: "Full-Stack / Frontend Developer",
   live: "https://votify-eosin.vercel.app",
   github: "https://github.com/Saiba401/Votify.git",
-  tech: ["HTML", "CSS", "Javascript", "Supabase"]
+  tech: ["HTML", "CSS", "Javascript", "Supabase"],
+  soldTo: "Kristian Mark A. Cunanan (HCDC BSIT STUDENT)"
 },
 ]
 export const certificates = [

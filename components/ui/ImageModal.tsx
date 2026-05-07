@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { LuX } from "react-icons/lu";
 
 interface ImageModalProps {
   open: boolean;
@@ -16,27 +17,36 @@ export default function ImageModal({ open, setOpen, src, alt }: ImageModalProps)
     <AnimatePresence>
       {open && (
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="max-w-4xl bg-background border border-white/10 p-4">
-            <DialogHeader>
-              <DialogTitle className="text-2xl">{alt}</DialogTitle>
+          <DialogContent className="max-w-4xl bg-background border border-border p-6 shadow-2xl rounded-2xl overflow-hidden">
+            <DialogHeader className="mb-4">
+              <DialogTitle className="text-xl font-bold">{alt}</DialogTitle>
             </DialogHeader>
 
             <motion.div
-              key={src} // ensures animation triggers on image change
-              initial={{ opacity: 0, scale: 0.9 }}
+              key={src}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="flex justify-start" // aligns image to top-left
+              className="relative aspect-video w-full rounded-xl overflow-hidden bg-muted/30 border border-border"
             >
               <Image
                 src={`/${src}`}
                 alt={alt}
-                width={600}
-                height={400}
-                className="object-cover rounded-md"
+                fill
+                className="object-contain p-2"
+                priority
               />
             </motion.div>
+            
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => setOpen(false)}
+                className="px-6 py-2 rounded-lg bg-muted hover:bg-muted/80 text-foreground font-medium transition-all border border-border"
+              >
+                Close
+              </button>
+            </div>
           </DialogContent>
         </Dialog>
       )}

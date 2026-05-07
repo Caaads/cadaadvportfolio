@@ -8,9 +8,13 @@ import { projects, type Project, certificates, gallery, journal, education, scan
 import TechStackSlider from "@/components/ui/TechStackSlider";
 import PortfolioLoader from "@/components/ui/PortfolioLoader";
 import EducationTimeline from "@/components/ui/EducationalTimeline";
+import LiveActivity from "@/components/ui/LiveActivity";
 import Particles from "react-tsparticles";
 import { FaLinkedin, FaGithub, FaFacebook, FaInstagram, FaDev } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 import CertificateModal from "@/components/ui/certificatemodal";
+import { useTheme } from "@/lib/hooks/use-theme";
+import BackToTop from "@/components/ui/BackToTop";
 
 export default function Home() {
 const [open, setOpen] = useState(false);
@@ -27,6 +31,11 @@ const [message, setMessage] = useState("");
 
 const [selectedCertificate, setSelectedCertificate] = useState<typeof certificates[0] | null>(null);
 const [certModalOpen, setCertModalOpen] = useState(false);
+
+const [showAllProjects, setShowAllProjects] = useState(false);
+const [showAllCertificates, setShowAllCertificates] = useState(false);
+const [activeAboutTab, setActiveAboutTab] = useState<"about" | "education">("about");
+const { isDark } = useTheme();
 
 const aboutImages = [
   { src: "/profile.jpg", caption: "Focused on clean UI and real-world systems" },
@@ -129,7 +138,7 @@ useEffect(() => {
 
 <motion.section
   id="hero"
-  className="min-h-screen flex flex-col md:flex-row items-center justify-between gap-12"
+  className="min-h-screen flex flex-col md:flex-row justify-between gap-10 pt-50"
   initial={{ opacity: 0, y: 30 }}
   whileInView={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.7 }}
@@ -146,51 +155,24 @@ useEffect(() => {
     </p>
 
     {/* Buttons */}
-    <div className="flex gap-4">
-      {/* View CV */}
-      <a
-        href="/AMCADA_CV.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="px-6 py-3 rounded-md bg-transparent border border-white/50 text-white hover:bg-white hover:text-black transition"
-      >
-        View CV
-      </a>
-
-      {/* Download CV */}
-      <a
-        href="/AMCADA_CV.pdf"
-        download
-        className="px-6 py-3 rounded-md bg-white text-black hover:opacity-90 transition"
-      >
-        Download CV
-      </a>
-    </div>
 
     {/* Optional additional buttons */}
     <div className="flex gap-4 mt-4">
       <a
         href="#projects"
-        className="px-6 py-3 rounded-md bg-white text-black font-medium hover:opacity-90 transition"
+        className="px-6 py-3 rounded-md bg-foreground text-background font-medium hover:opacity-90 transition"
       >
         View Projects
       </a>
       <a
         href="#contact"
-        className="px-6 py-3 rounded-md border border-white/20 hover:bg-white/10 transition"
+        className="px-6 py-3 rounded-md border border-border hover:bg-muted transition"
       >
         Contact Me
       </a>
     </div>
 
-    <div className="flex gap-4 mt-4">
-    <a
-  href="/educational-tour"
-  className="px-6 py-3 rounded-md border border-white/20 hover:bg-white/10 transition"
->
-  Educational Tour
-</a>
-</div>
+    <LiveActivity />
 
     
   </motion.div>
@@ -201,9 +183,9 @@ useEffect(() => {
     animate={{ y: [0, -12, 0] }}
     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
   >
-    <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border border-white/20 shadow-[0_0_60px_rgba(56,189,248,0.15)]">
+    <div className="relative w-80 h-80 md:w-100 md:h-100 rounded-full overflow-hidden border border-white/20 shadow-[0_0_60px_rgba(56,189,248,0.15)]">
       <Image
-        src="/profile1.jpg"
+        src={isDark ? "/profile3.jpg" : "/profile2.jpg"}
         alt="Profile picture"
         fill
         className="object-cover"
@@ -225,20 +207,40 @@ useEffect(() => {
   transition={{ duration: 0.7 }}
   viewport={{ once: false }}
 >
-  <h2 className="text-3xl font-semibold mb-10">Projects</h2>
-  <div className="grid md:grid-cols-3 gap-6">
-    {projects.map((project, index) => (
-      <motion.div
-        key={index}
-        whileHover={{ y: -10 }}
-        transition={{ type: "spring", stiffness: 200 }}
-        onClick={() => { setSelected(project); setOpen(true); }}
-        className="cursor-pointer rounded-xl border border-white/10 bg-white/5 backdrop-blur p-6"
+  <div className="flex items-center justify-between mb-10">
+    <h2 className="text-3xl font-semibold">Projects</h2>
+    {projects.length > 3 && (
+      <button
+        onClick={() => setShowAllProjects(!showAllProjects)}
+        className="px-6 py-2 rounded-full border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-all font-medium text-xs md:text-sm"
       >
-        <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-        <p className="text-muted-foreground text-sm">Click to view details</p>
-      </motion.div>
-    ))}
+        {showAllProjects ? "Show Less" : "View All"}
+      </button>
+    )}
+  </div>
+  <div className="grid md:grid-cols-3 gap-6">
+    <AnimatePresence mode="popLayout">
+      {projects.slice(0, showAllProjects ? projects.length : 3).map((project, index) => (
+        <motion.div
+          key={project.title}
+          layout
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          whileHover={{ y: -10 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 200,
+            layout: { duration: 0.3 }
+          }}
+          onClick={() => { setSelected(project); setOpen(true); }}
+          className="cursor-pointer rounded-xl border border-black/10 dark:border-white/10 bg-white/5 backdrop-blur p-6"
+        >
+          <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+          <p className="text-muted-foreground text-sm">Click to view details</p>
+        </motion.div>
+      ))}
+    </AnimatePresence>
   </div>
 </motion.section>
 
@@ -285,7 +287,7 @@ useEffect(() => {
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className="absolute bottom-6 left-6 right-6 bg-black/50 backdrop-blur px-4 py-2 rounded-md text-sm"
+    className="absolute bottom-6 left-6 right-6 bg-background/70 backdrop-blur-md px-4 py-2 rounded-md text-sm border border-border"
   >
     {aboutImages[aboutIndex].caption}
   </motion.div>
@@ -320,46 +322,76 @@ useEffect(() => {
   </div>
 </motion.div>
           <div className="flex-1 space-y-6">
-            <motion.h2
-              className="text-3xl font-semibold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              viewport={{ once: false }}
-            >
-              About Me
-            </motion.h2>
-            <motion.p
-              className="text-muted-foreground"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              viewport={{ once: false }}
-            >
-              I’m an IT student passionate about building modern web applications with clean design, smooth animations, and real-world functionality. Can work under pressure (barely).
-            </motion.p>
-
-            {/* Strengths, Journey, Interests */}
-            {["Strengths", "Journey", "Interests"].map((title, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3 + i * 0.1 }}
-                viewport={{ once: false }}
+            <div className="flex gap-4 mb-6 border-b border-white/10">
+              <button
+                onClick={() => setActiveAboutTab("about")}
+                className={cn(
+                  "pb-2 text-xl font-semibold transition-all relative",
+                  activeAboutTab === "about" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                )}
               >
-                <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                <p className="text-muted-foreground">
-                  {title === "Strengths" &&
-                    "Full-stack web development, Clean UI/UX design, Problem-solving, Tall Mestiza, Assurance, Lambing"}
-                  {title === "Journey" &&
-                    "Initially, I considered leaving college for DJ, bartender, barista careers, or exploring forensic science, engineering, or medical programs. Ultimately, I chose IT to blend creativity with technology."}
-                  {title === "Interests" &&
-                    "Passionate about web technologies, fitness, creative problem-solving, and exploring new tools to make applications interactive and user-friendly."}
-                </p>
-              </motion.div>
-            ))}
-            <EducationTimeline />
+                About Me
+                {activeAboutTab === "about" && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+                )}
+              </button>
+              <button
+                onClick={() => setActiveAboutTab("education")}
+                className={cn(
+                  "pb-2 text-xl font-semibold transition-all relative",
+                  activeAboutTab === "education" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Education
+                {activeAboutTab === "education" && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+                )}
+              </button>
+            </div>
+
+            <AnimatePresence mode="wait">
+              {activeAboutTab === "about" ? (
+                <motion.div
+                  key="about"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <motion.p
+                    className="text-muted-foreground"
+                  >
+                    I’m an IT student passionate about building modern web applications with clean design, smooth animations, and real-world functionality. Can work under pressure (barely).
+                  </motion.p>
+
+                  {/* Strengths, Journey, Interests */}
+                  {["Strengths", "Journey", "Interests"].map((title, i) => (
+                    <div key={i}>
+                      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                      <p className="text-muted-foreground">
+                        {title === "Strengths" &&
+                          "Full-stack web development, Clean UI/UX design, Problem-solving, Tall Mestiza, Assurance, Lambing"}
+                        {title === "Journey" &&
+                          "Initially, I considered leaving college for DJ, bartender, barista careers, or exploring forensic science, engineering, or medical programs. Ultimately, I chose IT to blend creativity with technology."}
+                        {title === "Interests" &&
+                          "Passionate about web technologies, fitness, creative problem-solving, and exploring new tools to make applications interactive and user-friendly."}
+                      </p>
+                    </div>
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="education"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <EducationTimeline />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </motion.section>
@@ -373,24 +405,43 @@ useEffect(() => {
   transition={{ duration: 0.7 }}
   viewport={{ once: false }}
 >
-  <h2 className="text-3xl font-semibold mb-8">Certificates</h2>
-  <div className="grid md:grid-cols-3 gap-6">
-    {certificates.map((cert, index) => (
-      <motion.div
-        key={index}
-        onClick={() => { setSelectedCertificate(cert); setCertModalOpen(true); }}
-        className="rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur p-2 cursor-pointer hover:scale-105 transition"
-        whileHover={{ scale: 1.05 }}
+  <div className="flex items-center justify-between mb-8">
+    <h2 className="text-3xl font-semibold">Certificates</h2>
+    {certificates.length > 3 && (
+      <button
+        onClick={() => setShowAllCertificates(!showAllCertificates)}
+        className="px-6 py-2 rounded-full border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-all font-medium text-xs md:text-sm"
       >
-        <Image
-          src={`/${cert.src}`}
-          alt={cert.alt}
-          width={300}
-          height={200}
-          className="object-cover"
-        />
-      </motion.div>
-    ))}
+        {showAllCertificates ? "Show Less" : "View All"}
+      </button>
+    )}
+  </div>
+  <div className="grid md:grid-cols-3 gap-6">
+    <AnimatePresence mode="popLayout">
+      {certificates.slice(0, showAllCertificates ? certificates.length : 3).map((cert, index) => (
+        <motion.div
+          key={cert.src}
+          layout
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          onClick={() => { setSelectedCertificate(cert); setCertModalOpen(true); }}
+          className="rounded-xl overflow-hidden border border-black/10 dark:border-white/10 bg-white/5 backdrop-blur p-2 cursor-pointer hover:scale-105 transition"
+          whileHover={{ scale: 1.05 }}
+          transition={{ 
+            layout: { duration: 0.3 }
+          }}
+        >
+          <Image
+            src={`/${cert.src}`}
+            alt={cert.alt}
+            width={300}
+            height={200}
+            className="object-cover"
+          />
+        </motion.div>
+      ))}
+    </AnimatePresence>
   </div>
 </motion.section>
 
@@ -406,86 +457,129 @@ useEffect(() => {
       {/* ================= CONTACT SECTION ================= */}
 <motion.section
   id="contact"
-  className="min-h-screen py-20"
-  initial={{ opacity: 0, y: 20 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.7 }}
-  viewport={{ once: false }}
+  className="min-h-screen py-24"
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  transition={{ duration: 0.8 }}
+  viewport={{ once: true }}
 >
-  <h2 className="text-3xl font-semibold mb-8">Contact</h2>
+  <div className="grid md:grid-cols-2 gap-16 items-start">
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-4xl font-bold mb-4">Let&apos;s Connect</h2>
+        <p className="text-muted-foreground text-lg leading-relaxed">
+          I&apos;m always open to discussing new projects, creative ideas or opportunities to be part of your visions.
+        </p>
+      </div>
 
-  <form
-    className="max-w-md space-y-4"
-    onSubmit={async (e) => {
-      e.preventDefault();
-      try {
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, message }),
-        });
-        if (res.ok) {
-          alert("Message sent!");
-          setName("");
-          setEmail("");
-          setMessage("");
-        } else {
-          alert("Failed to send message");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Error sending message");
-      }
-    }}
-  >
-    <input
-      value={name}
-      onChange={(e) => setName(e.target.value)}
-      className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
-      placeholder="Your name"
-      required
-    />
-    <input
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
-      placeholder="Your email"
-      type="email"
-      required
-    />
-    <textarea
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-      className="w-full rounded-md bg-white/5 border border-white/10 px-4 py-2"
-      placeholder="Message"
-      required
-    />
-    <button
-      type="submit"
-      className="px-6 py-2 rounded-md bg-white text-black font-medium hover:opacity-90 transition"
-    >
-      Send Message
-    </button>
-    <div className="mt-8 flex gap-6 justify-center md:justify-start">
-  <a href="https://www.linkedin.com/in/alfred-cada-67b97a370/" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition text-2xl">
-    <FaLinkedin />
-  </a>
-  <a href="https://github.com/Caaads" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition text-2xl">
-    <FaGithub />
-  </a>
-  <a href="https://www.facebook.com/alfredmari.cada.1" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition text-2xl">
-    <FaFacebook />
-  </a>
-  <a href="https://www.instagram.com/cadskieeee/" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition text-2xl">
-    <FaInstagram />
-  </a>
-  <a href="https://dev.to/caaads" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition text-2xl">
-    <FaDev />
-  </a>
-</div>
+      <div className="grid gap-6">
+        <div className="flex items-center gap-4 group">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+            <FaLinkedin className="text-xl" />
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider opacity-50">LinkedIn</p>
+            <a href="https://www.linkedin.com/in/alfred-cada-67b97a370/" target="_blank" rel="noreferrer" className="font-medium hover:text-primary transition-colors">Alfred Cada</a>
+          </div>
+        </div>
 
-  </form>
+        <div className="flex items-center gap-4 group">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+            <FaGithub className="text-xl" />
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider opacity-50">GitHub</p>
+            <a href="https://github.com/Caaads" target="_blank" rel="noreferrer" className="font-medium hover:text-primary transition-colors">Caaads</a>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-8 flex gap-4">
+        {[
+          { icon: FaFacebook, href: "https://www.facebook.com/alfredmari.cada.1" },
+          { icon: FaInstagram, href: "https://www.instagram.com/cadskieeee/" },
+          { icon: FaDev, href: "https://dev.to/caaads" }
+        ].map((social, i) => (
+          <a
+            key={i}
+            href={social.href}
+            target="_blank"
+            rel="noreferrer"
+            className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-all"
+          >
+            <social.icon />
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div className="p-8 rounded-3xl bg-muted/30 border border-border shadow-sm">
+      <form
+        className="space-y-6"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          try {
+            const res = await fetch("/api/contact", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, email, message }),
+            });
+            if (res.ok) {
+              alert("Message sent!");
+              setName("");
+              setEmail("");
+              setMessage("");
+            } else {
+              alert("Failed to send message");
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Error sending message");
+          }
+        }}
+      >
+        <div className="space-y-2">
+          <label className="text-sm font-semibold ml-1">Your Name</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-xl bg-background border border-border px-4 py-3 focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/50"
+            placeholder="John Doe"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold ml-1">Email Address</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-xl bg-background border border-border px-4 py-3 focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/50"
+            placeholder="john@example.com"
+            type="email"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-semibold ml-1">Message</label>
+          <textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="w-full rounded-xl bg-background border border-border px-4 py-3 min-h-[150px] focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-muted-foreground/50"
+            placeholder="Tell me about your project..."
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20"
+        >
+          Send Message
+        </button>
+      </form>
+    </div>
+  </div>
 </motion.section>
+    <BackToTop />
     </main>
       )}
     </>
